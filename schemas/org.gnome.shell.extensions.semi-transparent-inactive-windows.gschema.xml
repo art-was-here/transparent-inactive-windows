@@ -11,5 +11,10 @@
       <summary>Apply transparency to all windows</summary>
       <description>When enabled, applies transparency to all windows instead of just inactive ones.</description>
     </key>
+    <key name="animation-speed" type="i">
+      <default>300</default>
+      <summary>Animation speed in milliseconds</summary>
+      <description>The duration of the fade animation in milliseconds, from 50ms (very fast) to 1000ms (slow).</description>
+    </key>
   </schema>
 </schemalist> 

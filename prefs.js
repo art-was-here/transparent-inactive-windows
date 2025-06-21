@@ -33,6 +33,9 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
         // Add opacity slider (5% to 100%)
         box.append(this.buildSlider(settings, 'window-opacity', [5, 100, 1, 5], _('Window opacity percentage:')));
 
+        // Add animation speed slider (50ms to 1000ms)
+        box.append(this.buildMsSlider(settings, 'animation-speed', [50, 1000, 10, 50], _('Animation speed:')));
+
         return box;
     }
 
@@ -110,6 +113,69 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
             console.log(`Settings changed externally to: ${value}`);
             scale.set_value(value);
             valueLabel.set_text(`${value}%`);
+        });
+
+        vbox.append(hbox);
+        vbox.append(scale);
+
+        return vbox;
+    }
+
+    buildMsSlider(settings, key, values, labeltext) {
+        let [lower, upper, step, page] = values;
+        let vbox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 10 });
+
+        let hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+
+        let label = new Gtk.Label({ 
+            label: labeltext, 
+            halign: Gtk.Align.START
+        });
+
+        // Get initial value and log it
+        let initialValue = settings.get_int(key);
+        console.log(`Initial ${key} value: ${initialValue}`);
+
+        let valueLabel = new Gtk.Label({
+            label: `${initialValue}ms`,
+            halign: Gtk.Align.END,
+            width_chars: 5
+        });
+
+        hbox.append(label);
+        hbox.append(valueLabel);
+
+        let adjustment = new Gtk.Adjustment({
+            lower: lower,
+            upper: upper,
+            step_increment: step,
+            page_increment: page,
+            value: initialValue  // Set initial value from settings
+        });
+
+        let scale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: adjustment,
+            digits: 0,
+            hexpand: true,
+            draw_value: false
+        });
+
+        // Update settings when scale changes
+        scale.connect('value-changed', () => {
+            let value = Math.round(scale.get_value());
+            console.log(`Scale changed to: ${value}`);
+            settings.set_int(key, value);
+            valueLabel.set_text(`${value}ms`);
+            console.log(`Settings updated to: ${settings.get_int(key)}`);
+        });
+
+        // Update scale when settings change externally
+        settings.connect(`changed::${key}`, () => {
+            let value = settings.get_int(key);
+            console.log(`Settings changed externally to: ${value}`);
+            scale.set_value(value);
+            valueLabel.set_text(`${value}ms`);
         });
 
         vbox.append(hbox);

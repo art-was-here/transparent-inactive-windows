@@ -86,10 +86,13 @@ export default class SemiTransparentInactiveWindows extends Extension {
         // Remove any existing transitions to avoid conflicts
         actor.remove_all_transitions();
 
+        // Get animation speed from settings
+        const animationSpeed = this._settings.get_int('animation-speed');
+
         // Animate to the new opacity with a smooth fade
         actor.ease({
             opacity: targetOpacity,
-            duration: 300, // 300ms transition duration
+            duration: animationSpeed, // Use setting instead of hardcoded 300ms
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
         });
     }
