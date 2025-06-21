@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.semi-transparent-inactive-windows" path="/org/gnome/shell/extensions/semi-transparent-inactive-windows/">
+    <key name="window-opacity" type="i">
+      <default>150</default>
+      <summary>The opacity of inactive windows</summary>
+      <description>The opacity of inactive windows, from 0 (completely transparent) to 255 (completely opaque).</description>
+    </key>
+  </schema>
+</schemalist> 
