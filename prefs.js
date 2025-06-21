@@ -8,7 +8,7 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
     fillPreferencesWindow(window) {
         const page = new Adw.PreferencesPage();
         const group = new Adw.PreferencesGroup({
-            title: _('Semi Transparent Inactive Windows'),
+            title: _('Transparent Inactive Windows'),
         });
         group.add(this.buildPrefsWidget())
         page.add(group);
@@ -27,32 +27,94 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
             spacing: 16
         });
 
-        box.append(this.buildSpin(settings, 'window-opacity', [0, 255, 5, 50, 0], _('Opacity of inactive windows (0-255):')));
+        // Add toggle for applying to all windows
+        box.append(this.buildToggle(settings, 'apply-to-all-windows', _('Apply transparency to all windows')));
+        
+        // Add opacity slider (5% to 100%)
+        box.append(this.buildSlider(settings, 'window-opacity', [5, 100, 1, 5], _('Window opacity percentage:')));
 
         return box;
     }
 
-    buildSpin(settings, key, values, labeltext) {
-        let [lower, upper, step, page, digits] = values;
+    buildToggle(settings, key, labeltext) {
         let hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
 
         let label = new Gtk.Label({ label: labeltext, halign: Gtk.Align.START });
+        label.set_hexpand(true);
 
-        let spin = new Gtk.SpinButton({
-            digits: digits,
-            adjustment: new Gtk.Adjustment({
-                lower: lower,
-                upper: upper,
-                step_increment: step,
-                page_increment: page
-            })
+        let toggle = new Gtk.Switch({
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER
         });
 
-        settings.bind(key, spin, 'value', Gio.SettingsBindFlags.DEFAULT);
+        settings.bind(key, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         hbox.append(label);
-        hbox.append(spin);
+        hbox.append(toggle);
 
         return hbox;
-    };
+    }
+
+    buildSlider(settings, key, values, labeltext) {
+        let [lower, upper, step, page] = values;
+        let vbox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 10 });
+
+        let hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+
+        let label = new Gtk.Label({ 
+            label: labeltext, 
+            halign: Gtk.Align.START
+        });
+
+        // Get initial value and log it
+        let initialValue = settings.get_int(key);
+        console.log(`Initial ${key} value: ${initialValue}`);
+
+        let valueLabel = new Gtk.Label({
+            label: `${initialValue}%`,
+            halign: Gtk.Align.END,
+            width_chars: 5
+        });
+
+        hbox.append(label);
+        hbox.append(valueLabel);
+
+        let adjustment = new Gtk.Adjustment({
+            lower: lower,
+            upper: upper,
+            step_increment: step,
+            page_increment: page,
+            value: initialValue  // Set initial value from settings
+        });
+
+        let scale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: adjustment,
+            digits: 0,
+            hexpand: true,
+            draw_value: false
+        });
+
+        // Update settings when scale changes
+        scale.connect('value-changed', () => {
+            let value = Math.round(scale.get_value());
+            console.log(`Scale changed to: ${value}`);
+            settings.set_int(key, value);
+            valueLabel.set_text(`${value}%`);
+            console.log(`Settings updated to: ${settings.get_int(key)}`);
+        });
+
+        // Update scale when settings change externally
+        settings.connect(`changed::${key}`, () => {
+            let value = settings.get_int(key);
+            console.log(`Settings changed externally to: ${value}`);
+            scale.set_value(value);
+            valueLabel.set_text(`${value}%`);
+        });
+
+        vbox.append(hbox);
+        vbox.append(scale);
+
+        return vbox;
+    }
 } 
