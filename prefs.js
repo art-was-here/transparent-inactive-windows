@@ -83,9 +83,9 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
         hbox.append(valueLabel);
 
         let adjustment = new Gtk.Adjustment({
-            lower: lower,
-            upper: upper,
-            step_increment: step,
+                lower: lower,
+                upper: upper,
+                step_increment: step,
             page_increment: page,
             value: initialValue  // Set initial value from settings
         });
