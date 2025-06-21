@@ -13,6 +13,7 @@ This is a simple Gnome extension to make inactive windows semi-transparent. This
 [x] Increase/Decrease animation speed
 [x] Switch transparency to percentage slider
 
+
 ### Link to Gnome Extensions
 TODO
 

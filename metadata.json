@@ -1,8 +1,7 @@
 {
   "description": "Makes any non-active window semi-transparent",
-  "extension-id": "transparent-inactive-windows",
-  "gettext-domain": "gnome-shell-extensions",
   "name": "Transparent Inactive Windows",
+  "gettext-domain": "gnome-shell-extensions",
   "settings-schema": "org.gnome.shell.extensions.transparent-inactive-windows",
   "shell-version": [
     "45",
@@ -11,6 +10,6 @@
     "48"
   ],
   "url": "https://github.com/art-was-here/transparent-inactive-windows",
-  "uuid": "transparent-inactive-windows",
-  "version": 1
+  "uuid": "transparent-inactive-windows@art-was-here.github.io",
+  "version": 1.6
 } 

@@ -69,9 +69,8 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
             halign: Gtk.Align.START
         });
 
-        // Get initial value and log it
+        // Get initial value
         let initialValue = settings.get_int(key);
-        console.log(`Initial ${key} value: ${initialValue}`);
 
         let valueLabel = new Gtk.Label({
             label: `${initialValue}%`,
@@ -101,16 +100,13 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
         // Update settings when scale changes
         scale.connect('value-changed', () => {
             let value = Math.round(scale.get_value());
-            console.log(`Scale changed to: ${value}`);
             settings.set_int(key, value);
             valueLabel.set_text(`${value}%`);
-            console.log(`Settings updated to: ${settings.get_int(key)}`);
         });
 
         // Update scale when settings change externally
         settings.connect(`changed::${key}`, () => {
             let value = settings.get_int(key);
-            console.log(`Settings changed externally to: ${value}`);
             scale.set_value(value);
             valueLabel.set_text(`${value}%`);
         });
@@ -132,9 +128,8 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
             halign: Gtk.Align.START
         });
 
-        // Get initial value and log it
+        // Get initial value
         let initialValue = settings.get_int(key);
-        console.log(`Initial ${key} value: ${initialValue}`);
 
         let valueLabel = new Gtk.Label({
             label: `${initialValue}ms`,
@@ -164,16 +159,13 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
         // Update settings when scale changes
         scale.connect('value-changed', () => {
             let value = Math.round(scale.get_value());
-            console.log(`Scale changed to: ${value}`);
             settings.set_int(key, value);
             valueLabel.set_text(`${value}ms`);
-            console.log(`Settings updated to: ${settings.get_int(key)}`);
         });
 
         // Update scale when settings change externally
         settings.connect(`changed::${key}`, () => {
             let value = settings.get_int(key);
-            console.log(`Settings changed externally to: ${value}`);
             scale.set_value(value);
             valueLabel.set_text(`${value}ms`);
         });
