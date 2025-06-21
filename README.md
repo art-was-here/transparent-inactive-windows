@@ -17,10 +17,9 @@ This is a simple Gnome extension to make inactive windows semi-transparent. This
 TODO
 
 ### Manual Install
-```
-git clone https://github.com/art-was-here/transparent-inactive-windows
-mv transparent-inactive-windows transparent-inactive-windows@art-was-here
-mv transparent-inactive-windows@art-was-here $HOME/.local/share/gnome-shell/extensions/
-glib-compile-schemas ~/.local/share/gnome-shell/extensions/transparent-inactive-windows@art-was-here/schemas/
-gnome-extensions enable transparent-inactive-windows@art-was-here
-```
+
+`git clone https://github.com/art-was-here/transparent-inactive-windows`
+`mv transparent-inactive-windows transparent-inactive-windows@art-was-here`
+`mv transparent-inactive-windows@art-was-here ~/.local/share/gnome-shell/extensions/`
+`glib-compile-schemas ~/.local/share/gnome-shell/extensions/transparent-inactive-windows@art-was-here/schemas/`
+`gnome-extensions enable transparent-inactive-windows@art-was-here`
