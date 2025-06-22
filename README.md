@@ -8,9 +8,13 @@ This is a simple Gnome extension to make inactive windows semi-transparent. This
 ### Planned Features
 
 [x] Transparent inactive windows
+
 [x] Transparent fade animation
+
 [x] Apply transparency to ALL windows
+
 [x] Increase/Decrease animation speed
+
 [x] Switch transparency to percentage slider
 
 
