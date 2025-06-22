@@ -15,7 +15,7 @@ This is a simple Gnome extension to make inactive windows semi-transparent. This
 
 
 ### Link to Gnome Extensions
-TODO
+[Gnome Shell Extensions](https://extensions.gnome.org/extension/8255/transparent-inactive-windows/)
 
 ### Manual Install
 
