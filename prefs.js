@@ -9,8 +9,9 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
         const page = new Adw.PreferencesPage();
         const group = new Adw.PreferencesGroup({
             title: _('Transparent Inactive Windows'),
+            description: _('Configure window transparency settings'),
         });
-        group.add(this.buildPrefsWidget())
+        group.add(this.buildPrefsWidget());
         page.add(group);
         window.add(page);
     }
@@ -40,15 +41,26 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
     }
 
     buildToggle(settings, key, labeltext) {
-        let hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+        let hbox = new Gtk.Box({ 
+            orientation: Gtk.Orientation.HORIZONTAL, 
+            spacing: 10 
+        });
 
-        let label = new Gtk.Label({ label: labeltext, halign: Gtk.Align.START });
-        label.set_hexpand(true);
+        let label = new Gtk.Label({ 
+            label: labeltext, 
+            halign: Gtk.Align.START,
+            hexpand: true,
+            wrap: true,
+            xalign: 0
+        });
 
         let toggle = new Gtk.Switch({
             halign: Gtk.Align.END,
             valign: Gtk.Align.CENTER
         });
+
+        // Add tooltip for accessibility
+        toggle.set_tooltip_text(_('Toggle whether to apply transparency to all windows or just inactive ones'));
 
         settings.bind(key, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
 
@@ -60,13 +72,22 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
 
     buildSlider(settings, key, values, labeltext) {
         let [lower, upper, step, page] = values;
-        let vbox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 10 });
+        let vbox = new Gtk.Box({ 
+            orientation: Gtk.Orientation.VERTICAL, 
+            spacing: 10 
+        });
 
-        let hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+        let hbox = new Gtk.Box({ 
+            orientation: Gtk.Orientation.HORIZONTAL, 
+            spacing: 10 
+        });
 
         let label = new Gtk.Label({ 
             label: labeltext, 
-            halign: Gtk.Align.START
+            halign: Gtk.Align.START,
+            hexpand: true,
+            wrap: true,
+            xalign: 0
         });
 
         // Get initial value
@@ -82,11 +103,11 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
         hbox.append(valueLabel);
 
         let adjustment = new Gtk.Adjustment({
-                lower: lower,
-                upper: upper,
-                step_increment: step,
+            lower: lower,
+            upper: upper,
+            step_increment: step,
             page_increment: page,
-            value: initialValue  // Set initial value from settings
+            value: initialValue
         });
 
         let scale = new Gtk.Scale({
@@ -96,6 +117,9 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
             hexpand: true,
             draw_value: false
         });
+
+        // Add tooltip for accessibility
+        scale.set_tooltip_text(_('Adjust the transparency level of windows from 5% (very transparent) to 100% (fully opaque)'));
 
         // Update settings when scale changes
         scale.connect('value-changed', () => {
@@ -119,13 +143,22 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
 
     buildMsSlider(settings, key, values, labeltext) {
         let [lower, upper, step, page] = values;
-        let vbox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL, spacing: 10 });
+        let vbox = new Gtk.Box({ 
+            orientation: Gtk.Orientation.VERTICAL, 
+            spacing: 10 
+        });
 
-        let hbox = new Gtk.Box({ orientation: Gtk.Orientation.HORIZONTAL, spacing: 10 });
+        let hbox = new Gtk.Box({ 
+            orientation: Gtk.Orientation.HORIZONTAL, 
+            spacing: 10 
+        });
 
         let label = new Gtk.Label({ 
             label: labeltext, 
-            halign: Gtk.Align.START
+            halign: Gtk.Align.START,
+            hexpand: true,
+            wrap: true,
+            xalign: 0
         });
 
         // Get initial value
@@ -145,7 +178,7 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
             upper: upper,
             step_increment: step,
             page_increment: page,
-            value: initialValue  // Set initial value from settings
+            value: initialValue
         });
 
         let scale = new Gtk.Scale({
@@ -155,6 +188,9 @@ export default class SemiTransparentInactiveWindowsPreferences extends Extension
             hexpand: true,
             draw_value: false
         });
+
+        // Add tooltip for accessibility
+        scale.set_tooltip_text(_('Adjust the animation speed from 50ms (very fast) to 1000ms (slow)'));
 
         // Update settings when scale changes
         scale.connect('value-changed', () => {

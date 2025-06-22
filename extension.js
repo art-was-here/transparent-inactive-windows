@@ -37,12 +37,22 @@ export default class SemiTransparentInactiveWindows extends Extension {
     _getAllWindows() {
         const windows = [];
         const workspaceManager = global.workspace_manager;
+        
+        if (!workspaceManager) {
+            console.log('Workspace manager not available');
+            return windows;
+        }
+        
         const numWorkspaces = workspaceManager.get_n_workspaces();
         
         for (let i = 0; i < numWorkspaces; i++) {
             const workspace = workspaceManager.get_workspace_by_index(i);
-            const workspaceWindows = global.display.get_tab_list(Meta.TabList.NORMAL_ALL, workspace);
-            windows.push(...workspaceWindows);
+            if (workspace) {
+                const workspaceWindows = global.display.get_tab_list(Meta.TabList.NORMAL_ALL, workspace);
+                if (workspaceWindows) {
+                    windows.push(...workspaceWindows);
+                }
+            }
         }
         
         return windows;
@@ -59,25 +69,34 @@ export default class SemiTransparentInactiveWindows extends Extension {
         const opacityPercentage = this._settings.get_int('window-opacity');
         const applyToAll = this._settings.get_boolean('apply-to-all-windows');
         
+        // Validate opacity percentage
+        const clampedOpacity = Math.max(5, Math.min(100, opacityPercentage));
+        
         // Convert percentage to 0-255 range
-        const opacity = Math.round((opacityPercentage / 100) * 255);
+        const opacity = Math.round((clampedOpacity / 100) * 255);
         
         for (const window of windows) {
+            if (!window) continue;
+            
             if (applyToAll) {
                 // Apply transparency to all windows
                 this._setWindowOpacity(window, opacity);
             } else {
                 // Apply transparency only to inactive windows (original behavior)
-            if (window === focusedWindow) {
-                this._setWindowOpacity(window, 255);
-            } else {
-                this._setWindowOpacity(window, opacity);
+                if (window === focusedWindow) {
+                    this._setWindowOpacity(window, 255);
+                } else {
+                    this._setWindowOpacity(window, opacity);
                 }
             }
         }
     }
 
     _setWindowOpacity(window, targetOpacity) {
+        if (!window) {
+            return;
+        }
+        
         const actor = window.get_compositor_private();
         if (!actor) {
             return;
@@ -86,13 +105,13 @@ export default class SemiTransparentInactiveWindows extends Extension {
         // Remove any existing transitions to avoid conflicts
         actor.remove_all_transitions();
 
-        // Get animation speed from settings
-        const animationSpeed = this._settings.get_int('animation-speed');
+        // Get animation speed from settings and validate
+        const animationSpeed = Math.max(50, Math.min(1000, this._settings.get_int('animation-speed')));
 
         // Animate to the new opacity with a smooth fade
         actor.ease({
             opacity: targetOpacity,
-            duration: animationSpeed, // Use setting instead of hardcoded 300ms
+            duration: animationSpeed,
             mode: Clutter.AnimationMode.EASE_OUT_QUAD,
         });
     }

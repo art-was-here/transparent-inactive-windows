@@ -28,3 +28,5 @@ TODO
 `glib-compile-schemas ~/.local/share/gnome-shell/extensions/transparent-inactive-windows@art-was-here/schemas/`
 
 `gnome-extensions enable transparent-inactive-windows@art-was-here`
+
+You may have to log in and out.
